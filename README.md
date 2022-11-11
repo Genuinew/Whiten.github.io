@@ -1,2 +1,2 @@
-# Whiten.github.io
+# WhitenWhiten.github.io
 Git Pages' repo
