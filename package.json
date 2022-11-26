@@ -1,0 +1,17 @@
+{
+  "name": "WhitenWhiten.github.io",
+  "version": "1.0.0",
+  "description": "Vuepress blog",
+  "main": "index.js",
+  "repository": "https://github.com/WhitenWhiten/WhitenWhiten.github.io.git",
+  "author": "Whiten <31219380+Genuinew@users.noreply.github.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.9.7"
+  },
+  "scripts": {
+    "docs:dev": "set NODE_OPTIONS=--openssl-legacy-provider && vuepress dev docs",
+    "docs:build": "set NODE_OPTIONS=--openssl-legacy-provider && vuepress build docs",
+    "deploy-gh": "set NODE_OPTIONS=--openssl-legacy-provider && scripts/deploy-gh.bat"
+  }
+}
