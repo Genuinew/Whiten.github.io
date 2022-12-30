@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html><head>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+
+  
+
+  
+
+  <meta name="generator" content="Hugo 0.109.0">
+  
+  
+  
+  
+  <title>My New Hugo Site</title>
+
+  <meta property="og:title" content="" />
+<meta property="og:description" content="Vue Notes [[toc]]
+Intro Vue的核心功能
+声明式渲染：Vue基于html标准拓展了一套模板语法，使得我们能够声明式地描述最终的html与js状态之间的关系。(避免直接操纵DOM) 响应性：Vue 会自动跟踪 JavaScript 状态并在其发生变化时响应式地更新 DOM Vue 单文件组件
+在工程中，一个vue组件被包含在单个文件中，包含其html(模板)、js(逻辑)、css(样式)，比如一个计数器组件：
+&lt;script&gt; export default { data() { return { count: 0 } } } &lt;/script&gt; &lt;template&gt; &lt;button @click=&#34;count&#43;&#43;&#34;&gt;Count is: {{ count }}&lt;/button&gt; &lt;/template&gt; &lt;style scoped&gt; button { font-weight: bold; } &lt;/style&gt; 想要运行本组件，最省时省力的方法是通过WebStorm创建vue.js工程，让其自动使用yarn进行初始化。初始化完毕后，将src目录下的App.vue文件的内容替换为上述单文件组件内容，再点击运行即可开始构建，并部署到本地。
+注意，本notes基于选项式风格的api
+声明式渲染 在export default中，如果声明了data() {}字段，那么data()中返回的所有变量，比如message都可以被export default中所有其它字段通过this.message访问，而在&lt;template&gt;中，则可以通过双花括号的形式访问，比如第12行的&lt;button @click=&#39;count&#43;&#43;&#39;&gt; Count is: {{count}}&lt;/button&gt;；或者以最简单的方式：&lt;p&gt;{{count}}&lt;/p&gt;.
+当任何JS语句使得count的值发生实质性改变时，Vue会响应式地更新对应的template，而无需我们手动进行条件判断，并操纵DOM.
+双花括号不仅可以访问data()字段中声明的变量，事实上，其中可以包含任意合法的JS语句，并且其值更新时，对应的template渲染也会更新。
+Note: 双花括号法会被解释为纯粹的文本，而不能被解释为嵌套的标签，如果希望将某个变量的值作为元素插入，则需要使用v-html指令：
+&lt;p&gt;Using text interpolation: {{ rawHtml }}&lt;/p&gt; &lt;p&gt;Using v-html directive: &lt;span v-html=&#34;rawHtml&#34;&gt;&lt;/span&gt;&lt;/p&gt; 渲染结果是:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://WhitenWhiten.github.io/vue-notes/" /><meta property="article:section" content="" />
+
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="Vue Notes [[toc]]
+Intro Vue的核心功能
+声明式渲染：Vue基于html标准拓展了一套模板语法，使得我们能够声明式地描述最终的html与js状态之间的关系。(避免直接操纵DOM) 响应性：Vue 会自动跟踪 JavaScript 状态并在其发生变化时响应式地更新 DOM Vue 单文件组件
+在工程中，一个vue组件被包含在单个文件中，包含其html(模板)、js(逻辑)、css(样式)，比如一个计数器组件：
+&lt;script&gt; export default { data() { return { count: 0 } } } &lt;/script&gt; &lt;template&gt; &lt;button @click=&#34;count&#43;&#43;&#34;&gt;Count is: {{ count }}&lt;/button&gt; &lt;/template&gt; &lt;style scoped&gt; button { font-weight: bold; } &lt;/style&gt; 想要运行本组件，最省时省力的方法是通过WebStorm创建vue.js工程，让其自动使用yarn进行初始化。初始化完毕后，将src目录下的App.vue文件的内容替换为上述单文件组件内容，再点击运行即可开始构建，并部署到本地。
+注意，本notes基于选项式风格的api
+声明式渲染 在export default中，如果声明了data() {}字段，那么data()中返回的所有变量，比如message都可以被export default中所有其它字段通过this.message访问，而在&lt;template&gt;中，则可以通过双花括号的形式访问，比如第12行的&lt;button @click=&#39;count&#43;&#43;&#39;&gt; Count is: {{count}}&lt;/button&gt;；或者以最简单的方式：&lt;p&gt;{{count}}&lt;/p&gt;.
+当任何JS语句使得count的值发生实质性改变时，Vue会响应式地更新对应的template，而无需我们手动进行条件判断，并操纵DOM.
+双花括号不仅可以访问data()字段中声明的变量，事实上，其中可以包含任意合法的JS语句，并且其值更新时，对应的template渲染也会更新。
+Note: 双花括号法会被解释为纯粹的文本，而不能被解释为嵌套的标签，如果希望将某个变量的值作为元素插入，则需要使用v-html指令：
+&lt;p&gt;Using text interpolation: {{ rawHtml }}&lt;/p&gt; &lt;p&gt;Using v-html directive: &lt;span v-html=&#34;rawHtml&#34;&gt;&lt;/span&gt;&lt;/p&gt; 渲染结果是:"/>
+
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="http://WhitenWhiten.github.io/assets/css/style.min.699f46622e3574a7f9ecca4c5877067845fe89ffcd9c4335df2dff23ddae215e.css" integrity="sha256-aZ9GYi41dKf57MpMWHcGeEX&#43;if/NnEM13y3/I92uIV4=">
+
+  <script src="http://WhitenWhiten.github.io/assets/js/main.min.182da266209851bc7c828aa7377f98f914e1e76c8decdd53a6cbe9bffea92cde.js" integrity="sha256-GC2iZiCYUbx8goqnN3&#43;Y&#43;RTh52yN7N1Tpsvpv/6pLN4="></script>
+  
+  </head><body><header class="header-container layout-block layout-padding">
+  <div class="header-inner content-padding-large soft-size--large soft-style--box">
+    <div class="header-logo">
+      <a href="http://WhitenWhiten.github.io/"><h1>My New Hugo Site</h1></a>
+    </div>
+    <nav class="header-nav">
+      <div class="header-nav--btn">
+        <div class="btn-item"></div>
+        <div class="btn-item"></div>
+        <div class="btn-item"></div>
+      </div>
+      <div class="header-nav--list">
+        <div>
+          
+        </div>
+      </div>
+    </nav>
+  </div>
+</header><main id="content">
+    
+
+    <div class="single-container layout-block">
+      <div class="article-info">
+        <div class="article-header layout-padding">
+          <div class="article-cover card-container content-padding-large soft-size--large soft-style--box ">
+
+  <div class="card-cover">
+    
+  </div>
+
+  <div class="card-text">
+    <h1 class="card-text--title"></h1>
+    
+      
+    
+  </div>
+
+</div>
+        </div>
+
+        <div class="article-content">
+          <div class="markdown-body content-padding-large soft-size--large soft-style--box">
+            <h1 id="vue-notes">Vue Notes</h1>
+<p>[[toc]]</p>
+<h2 id="intro">Intro</h2>
+<p><em><strong>Vue的核心功能</strong></em></p>
+<ol>
+<li>声明式渲染：Vue基于html标准拓展了一套模板语法，使得我们能够声明式地描述最终的html与js状态之间的关系。(避免直接操纵DOM)</li>
+<li>响应性：Vue 会自动跟踪 JavaScript 状态并在其发生变化时响应式地更新 DOM</li>
+</ol>
+<p><em><strong>Vue 单文件组件</strong></em></p>
+<p>在工程中，一个vue组件被包含在单个文件中，包含其html(模板)、js(逻辑)、css(样式)，比如一个计数器组件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">data</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">count</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">template</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">button</span> <span style="color:#f92672">@click</span><span style="color:#e6db74">=&#34;count++&#34;</span>&gt;<span style="color:#a6e22e">Count</span> <span style="color:#a6e22e">is</span><span style="color:#f92672">:</span> {{ <span style="color:#a6e22e">count</span> }}&lt;/<span style="color:#f92672">button</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">template</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">style</span> <span style="color:#a6e22e">scoped</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">button</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">font</span><span style="color:#f92672">-</span><span style="color:#a6e22e">weight</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">bold</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">style</span>&gt;
+</span></span></code></pre></div><p>想要运行本组件，最省时省力的方法是通过WebStorm创建vue.js工程，让其自动使用yarn进行初始化。初始化完毕后，将<code>src</code>目录下的<code>App.vue</code>文件的内容替换为上述单文件组件内容，再点击运行即可开始构建，并部署到本地。</p>
+<p><em><strong>注意，本notes基于选项式风格的api</strong></em></p>
+<h2 id="声明式渲染">声明式渲染</h2>
+<p>在<code>export default</code>中，如果声明了<code>data() {}</code>字段，那么<code>data()</code>中返回的所有变量，比如<code>message</code>都可以被<code>export default</code>中所有其它字段通过<code>this.message</code>访问，而在<code>&lt;template&gt;</code>中，则可以通过双花括号的形式访问，比如第12行的<code>&lt;button @click='count++'&gt; Count is: {{count}}&lt;/button&gt;</code>；或者以最简单的方式：<code>&lt;p&gt;{{count}}&lt;/p&gt;</code>.</p>
+<p>当任何JS语句使得count的值发生实质性改变时，Vue会响应式地更新对应的<code>template</code>，而无需我们手动进行条件判断，并操纵DOM.</p>
+<p>双花括号不仅可以访问<code>data()</code>字段中声明的变量，事实上，其中可以包含任意合法的JS语句，并且其值更新时，对应的template渲染也会更新。</p>
+<p><em><strong>Note:</strong></em> 双花括号法会被解释为纯粹的文本，而不能被解释为嵌套的标签，如果希望将某个变量的值作为元素插入，则需要使用<code>v-html</code>指令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;<span style="color:#a6e22e">Using</span> <span style="color:#a6e22e">text</span> <span style="color:#a6e22e">interpolation</span><span style="color:#f92672">:</span> {{ <span style="color:#a6e22e">rawHtml</span> }}&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;<span style="color:#a6e22e">Using</span> <span style="color:#a6e22e">v</span><span style="color:#f92672">-</span><span style="color:#a6e22e">html</span> <span style="color:#a6e22e">directive</span><span style="color:#f92672">:</span> &lt;<span style="color:#f92672">span</span> <span style="color:#f92672">v-html</span><span style="color:#e6db74">=&#34;rawHtml&#34;</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span></code></pre></div><p>渲染结果是:</p>
+<pre tabindex="0"><code>Using text interpolation: &lt;span style=&#34;color: red&#34;&gt;This should be red.&lt;/span&gt;
+Using v-html directive: This should be red.(红色的)
+</code></pre><p>并且，第二行的渲染结果将总与rawHtml的值保持同步。</p>
+<h2 id="attribute绑定">Attribute绑定</h2>
+<p>上述双花括号(Mustache)引用变量或语句的值只能对html标签内部的文本生效。但是，有时候我们希望改变一对标签的属性，即Attribute。这时就需要使用vue提供的动态绑定机制，比如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">data</span>() {<span style="color:#66d9ef">return</span> {<span style="color:#a6e22e">someValue</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>}}
+</span></span><span style="display:flex;"><span>    }&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//而template中则可以这样写：
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">v</span><span style="color:#f92672">-bind</span><span style="color:#f92672">:</span><span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;someValue&#39;</span>&gt;&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//因为使用得太多，所以vue提供了简写方法：
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>&lt;<span style="color:#f92672">div</span> <span style="color:#f92672">:</span><span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;someValue&#39;</span>&gt;&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span></code></pre></div><p>在这一例子中，如果<code>someValue</code>的值发生了改变，那么div的id也会相应改变。这对于改变样式是十分方便的：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt; <span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">data</span>() {<span style="color:#66d9ef">return</span> {<span style="color:#a6e22e">titleClass</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span>}}
+</span></span><span style="display:flex;"><span>	}&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">template</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">h1</span> <span style="color:#f92672">:class</span><span style="color:#e6db74">=&#34;titleClass&#34;</span>&gt;<span style="color:#a6e22e">What</span> <span style="color:#a6e22e">color</span> <span style="color:#a6e22e">am</span> <span style="color:#a6e22e">I</span><span style="color:#f92672">?</span>&lt;/<span style="color:#f92672">h1</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">button</span> <span style="color:#f92672">@click</span><span style="color:#e6db74">=&#34;titleClass=&#39;title2&#39;&#34;</span>&gt;<span style="color:#a6e22e">Green</span>&lt;/<span style="color:#f92672">button</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">button</span> <span style="color:#f92672">@click</span><span style="color:#e6db74">=&#34;titleClass=&#39;title1&#39;&#34;</span>&gt;<span style="color:#a6e22e">Red</span>&lt;/<span style="color:#f92672">button</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">template</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">style</span>&gt;
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">title1</span> {<span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">red</span>;}
+</span></span><span style="display:flex;"><span>.<span style="color:#a6e22e">title2</span> {<span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">green</span>;}
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">style</span>&gt;
+</span></span></code></pre></div><p>不过需要注意，<em><strong>v-bind中，只支持单个js表达式，比如一个函数，一个三目运算，不可以是语句</strong></em></p>
+<p>要被绑定的Attribute也可以动态地确定，这种方法叫做动态参数值。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">v</span><span style="color:#f92672">-bind</span><span style="color:#f92672">:</span><span style="color:#960050;background-color:#1e0010">[</span><span style="color:#a6e22e">someAttribute</span><span style="color:#960050;background-color:#1e0010">]=&#39;</span><span style="color:#a6e22e">Someval</span><span style="color:#960050;background-color:#1e0010">&#39;</span>&gt;&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span></code></pre></div><p>vue对<code>someAttribute</code>进行求值后，会将其作为属性名称。这同样适用于事件绑定。</p>
+<h2 id="事件监听">事件监听</h2>
+<p>在原生JavaScript中，我们通过addEventListener方法为一个DOM元素添加事件监听方法。Vue提供了更加简洁直接的模板语法，即<code>v-on</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">button</span> <span style="color:#a6e22e">v</span><span style="color:#f92672">-on:click</span><span style="color:#e6db74">=&#34;increment&#34;</span>&gt;{{ <span style="color:#a6e22e">count</span> }}&lt;/<span style="color:#f92672">button</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//或者使用v-on的简略写法
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>&lt;<span style="color:#f92672">button</span> <span style="color:#f92672">@click</span><span style="color:#e6db74">=&#34;increment&#34;</span>&gt;{{ <span style="color:#a6e22e">count</span> }}&lt;/<span style="color:#f92672">button</span>&gt;
+</span></span></code></pre></div><p>其中，<code>increment</code>函数声明在<code>export default</code>中的<code>methods</code>字段中：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">data</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">count</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">methods</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">increment</span>() {<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">count</span><span style="color:#f92672">++</span>}
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span></code></pre></div><p>注意，前面提到过，data中声明的变量可以通过this关键字访问。</p>
+<p>并且，正如上一节中的示例所写，<code>@click='x'</code>中的x，既可以是<code>methods</code>中声明的方法，也可以是原生的JS语句</p>
+<h2 id="表单绑定">表单绑定</h2>
+<p>可以同时使用<code>v-bind</code>和<code>v-on</code>来将表单的值与某个变量进行绑定：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">input</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">:value</span><span style="color:#e6db74">=&#34;text&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">input</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;event =&gt; text = event.target.value&#34;</span>&gt;
+</span></span></code></pre></div><p>这样下来，input的输入值就绑定在了data字段中声明的text变量上，接着就可以写<code>&lt;p&gt;{{text}}&lt;/p&gt;</code>这样的模板语句，来显示input的输入值。不过这样做有些麻烦了，vue提供了<code>v-model</code>指令：<code>&lt;input v-model='text'&gt;</code>， 可以直接地将表达的输入值与data字段的变量绑定。<code>v-model</code>没有什么神奇的地方，它只是上述代码段的语法糖。并且，<code>v-model</code>不仅支持input，也支持多选、单选、下拉等表单。</p>
+<h2 id="条件渲染">条件渲染</h2>
+<p>可以使用<code>v-if</code>和<code>v-else</code>的组合来根据逻辑条件渲染元素：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">h1</span> <span style="color:#f92672">v-if</span><span style="color:#e6db74">=&#34;awesome&#34;</span>&gt;<span style="color:#a6e22e">Vue</span> <span style="color:#a6e22e">is</span> <span style="color:#a6e22e">awesome</span><span style="color:#960050;background-color:#1e0010">!</span>&lt;/<span style="color:#f92672">h1</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">h1</span> <span style="color:#f92672">v-else</span>&gt;<span style="color:#a6e22e">Oh</span> <span style="color:#a6e22e">no</span> <span style="color:#960050;background-color:#1e0010">😢</span>&lt;/<span style="color:#f92672">h1</span>&gt;
+</span></span></code></pre></div><p>当awesome的值为真时，渲染第一个h1标题: &ldquo;Vue is awesome&rdquo;，如果为假，则渲染第二个:&ldquo;Oh no 😢&rdquo;.</p>
+<p>当然，如果条件分为多个区间的时候，可以使用嵌套的<code>v-else-if</code>进行多重条件判断：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span> <span style="color:#f92672">v-if</span><span style="color:#e6db74">=&#34;condition===&#39;1&#39;&#34;</span>&gt; <span style="color:#a6e22e">1</span> &lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span> <span style="color:#a6e22e">v</span><span style="color:#f92672">-else-if</span><span style="color:#960050;background-color:#1e0010">=&#34;</span><span style="color:#a6e22e">condition</span><span style="color:#f92672">=</span><span style="color:#960050;background-color:#1e0010">==&#39;</span><span style="color:#a6e22e">2</span><span style="color:#960050;background-color:#1e0010">&#39;&#34;</span>&gt; <span style="color:#ae81ff">2</span> &lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span> <span style="color:#a6e22e">v</span><span style="color:#f92672">-else-if</span><span style="color:#960050;background-color:#1e0010">=&#34;</span><span style="color:#a6e22e">condition</span><span style="color:#f92672">=</span><span style="color:#960050;background-color:#1e0010">==&#39;</span><span style="color:#a6e22e">3</span><span style="color:#960050;background-color:#1e0010">&#39;&#34;</span>&gt; <span style="color:#ae81ff">3</span> &lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span> <span style="color:#f92672">v-else</span>&gt; <span style="color:#a6e22e">Other</span> <span style="color:#a6e22e">conditions</span> &lt;/<span style="color:#f92672">p</span>&gt;
+</span></span></code></pre></div><p><code>v-if</code>语句也可以用于<code>template</code>标签，对整个文本部分进行条件性渲染。</p>
+<p><code>v-show</code>: 这一标签与<code>v-if</code>用法基本一致，不过，<code>v-show</code>不论条件真假都会对元素进行渲染，只是根据条件判断的结果修改css样式中的<code>display</code>属性。它不可以和<code>v-else</code>配合使用，也不能对template使用。</p>
+<p><code>v-if</code>和<code>v-show</code>对比起来，前者会首先对条件进行求值，如果不符合条件，就不会渲染(因此是惰性的),只有当条件首次变为false时才会渲染，并且它在切换状态的时候，条件区块中的事件监听器与子组件都会被销毁重建，因此有更高的条件切换开销；而后者则无论如何都会渲染，只是根据条件值选择是否显示。</p>
+<p>总地来说，需要频繁切换的时候，应该使用<code>v-show</code>;如果条件很少改变，或者说首次运行时就可以确定下来，那么应当选择<code>v-if</code></p>
+<h2 id="列表渲染">列表渲染</h2>
+<p><code>v-for</code>指令用于渲染基于某个数组的列表：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">ul</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">li</span> <span style="color:#f92672">v-for</span><span style="color:#e6db74">=&#34;todo in todos&#34; :key=&#34;todo.id&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    {{ <span style="color:#a6e22e">todo.text</span> }}
+</span></span><span style="display:flex;"><span>  &lt;/<span style="color:#f92672">li</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">ul</span>&gt;
+</span></span></code></pre></div><p>其中<code>:key</code>是为了给子元素分配唯一的特殊id，避免渲染异常。</p>
+<p>如果希望更新这个列表，那么可以通过两种方式更新源数组：</p>
+<ol>
+<li>对源数组调用push、splice等变更方法，添加或删除元素</li>
+<li>替换源数组的引用指向，比如调用<code>todos = todos.filter(x =&gt; x.id != 'someid')</code></li>
+</ol>
+<h2 id="计算属性">计算属性</h2>
+<p>在<code>export default</code>中添加<code>computed:</code>字段，其中定义的变量所依赖的其它响应式状态会被收集为依赖，并在这些依赖的值改变时，自动改变自身的值，进行计算。</p>
+<p>计算属性可以减少在模板中使用复杂的表达式，造成复杂的逻辑，比如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;<span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">data</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">author</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;John Doe&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">books</span><span style="color:#f92672">:</span> [
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;Vue 2 - Advanced Guide&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;Vue 3 - Basic Guide&#39;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#e6db74">&#39;Vue 4 - The Mystery&#39;</span>
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">template</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">p</span>&gt;<span style="color:#a6e22e">Has</span> <span style="color:#a6e22e">published</span> <span style="color:#a6e22e">books</span><span style="color:#f92672">:</span>&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>	&lt;<span style="color:#f92672">span</span>&gt;{{ <span style="color:#a6e22e">author</span>.<span style="color:#a6e22e">books</span>.<span style="color:#a6e22e">length</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#e6db74">&#39;Yes&#39;</span> <span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;No&#39;</span> }}&lt;/<span style="color:#f92672">span</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">template</span>&gt;
+</span></span></code></pre></div><p>其中的18行中，进行了条件判断，这写在模板中是不方便看懂的。可以利用计算属性进行优化：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span><span style="color:#a6e22e">computed</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">publishedBooksMessage</span>() {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">author</span>.<span style="color:#a6e22e">books</span>.<span style="color:#a6e22e">length</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#e6db74">&#39;Yes&#39;</span> <span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;No&#39;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">span</span>&gt;{{<span style="color:#a6e22e">publishedBooksMessage</span>}}&lt;/<span style="color:#f92672">span</span>&gt;
+</span></span></code></pre></div><p>可以注意到，如果将<code>publishedBooksMessage()</code>写进<code>methods</code>中，在把template中的标签替换成：<code>&lt;span&gt;{{publishedBooksMessage()}}&lt;/span&gt;</code>，似乎可以达成一样的效果。但是，区别在于，这种写法每次对span进行渲染时，都会调用<code>publishedBooksMessage()</code>, 而<code>computed</code>则不同，它存在对结果的缓存——如果其依赖的响应式状态的值没有发生改变，那么<code>computed</code>的结果就不会改变。</p>
+<h2 id="生命周期与模板引用">生命周期与模板引用</h2>
+<p>尽管Vue为我们处理了对DOM的操作，但有时候我们还是不得不自己处理一些DOM引用。为此，Vue也提供了模板引用的语法，即在属性中加入ref这一Attribute：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mounted</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">$refs</span>.<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">textContent</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;mounted!&#39;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span> <span style="color:#a6e22e">ref</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;p&#34;</span>&gt;<span style="color:#a6e22e">hello</span>&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span></code></pre></div><p>想要对这一模板引用进行操作，则需要通过<code>this.$refs.p</code>进行。不过，<code>this.$refs.p</code>只有在组件挂载之后才可以得到访问。想要在组件挂载之后执行代码，可以通过<code>mounted()</code>进行，见上面的示例。<code>mounted</code>是一种<code>生命周期钩子</code>，它允许我们注册一个在组件的特定生命周期调用的回调函数。还有一些其他的钩子如 <code>created</code> 和 <code>updated</code>。</p>
+<h2 id="侦听器">侦听器</h2>
+<p>在<code>computed</code>中，我们了解到，Vue可以通过声明计算属性，自动地收集依赖，在依赖值更新时自动更新计算属性的值。不过有时候，我们希望当某个计算属性的值发生改变时，触发一定的副作用，比如在控制台进行打印，比如修改DOM，这时就需要<code>watch</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">data</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">question</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">answer</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Questions usually contain a question mark. ;-)&#39;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">watch</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 每当 question 改变时，这个函数就会执行
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">question</span>(<span style="color:#a6e22e">newQuestion</span>, <span style="color:#a6e22e">oldQuestion</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">newQuestion</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#39;?&#39;</span>)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">getAnswer</span>()
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">methods</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">async</span> <span style="color:#a6e22e">getAnswer</span>() {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">answer</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Thinking...&#39;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">await</span> <span style="color:#a6e22e">fetch</span>(<span style="color:#e6db74">&#39;https://yesno.wtf/api&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">answer</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">await</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">json</span>()).<span style="color:#a6e22e">answer</span>
+</span></span><span style="display:flex;"><span>      } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">error</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">answer</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Error! Could not reach the API. &#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">error</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Ask</span> <span style="color:#a6e22e">a</span> <span style="color:#a6e22e">yes</span><span style="color:#f92672">/</span><span style="color:#a6e22e">no</span> <span style="color:#a6e22e">question</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">v</span><span style="color:#f92672">-model</span><span style="color:#960050;background-color:#1e0010">=&#34;</span><span style="color:#a6e22e">question</span><span style="color:#960050;background-color:#1e0010">&#34;</span> /&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">p</span>&gt;{{ <span style="color:#a6e22e">answer</span> }}&lt;/<span style="color:#f92672">p</span>&gt;
+</span></span></code></pre></div><p>侦听器默认情况下只监听依赖的浅层，而不监听嵌套的属性。具体见<a href="https://cn.vuejs.org/guide/essentials/watchers.html#basic-example" target="_blank" rel="noopener">侦听器| vue.js</a></p>
+<h2 id="组件">组件</h2>
+<p>截至目前，我们都只使用了单个组件。但是在实际的工程中，我们往往使用许多嵌套的组件。</p>
+<p>父组件可以在模板中渲染另一个组件作为子组件。要使用子组件，我们需要先导入它，并用<code>components</code>注册：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">ChildComp</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;./ChildComp.vue&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">components</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ChildComp</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span></code></pre></div><p>接着，就可以在template中使用组件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">ChildComp</span> /&gt;
+</span></span></code></pre></div><h2 id="props">Props</h2>
+<p>子组件可以通过 props 从父组件接受动态数据, 这类似于exe文件调用dll文件，通过暴露的接口函数传递参数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span><span style="color:#75715e">// 在子组件中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>&lt;<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">props</span><span style="color:#f92672">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">msg</span><span style="color:#f92672">:</span> String
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span></code></pre></div><p>一旦在props中声明了接口变量，如该例子中的msg，就可以使用<code>this.msg</code>进行访问。</p>
+<p>父组件想要将参数传递给子组件，可以像一般的Attributes一样(这意味着v-bind也适用):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">ChildComp</span> <span style="color:#a6e22e">msg</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Hello&#34;</span> /&gt;		<span style="color:#75715e">// 一般的文本
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>&lt;<span style="color:#f92672">ChildComp</span> <span style="color:#f92672">:msg</span><span style="color:#e6db74">=&#34;greeting&#34;</span> /&gt;	<span style="color:#75715e">// v-bind
+</span></span></span></code></pre></div><h2 id="emits">Emits</h2>
+<p>子组件也可以向父组件触发事件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">default</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 声明触发的事件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">emits</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#39;response&#39;</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">created</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 带参数触发
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">$emit</span>(<span style="color:#e6db74">&#39;response&#39;</span>, <span style="color:#e6db74">&#39;hello from child&#39;</span>)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span></code></pre></div><p>其中，<code>emits</code>中声明了子组件事件的名称，<code>this.$emit</code>的第一个参数时事件的名称，其余所有参数都会传递给父组件。这里的created是一个生命周期钩子，表示子组件在created这一阶段要做出什么样的行为，它与<code>this.$emit</code>是无关的，只是举例使用了而已。</p>
+<p>父组件可以以v-on的形式对子组件事件做出响应：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">ChildComp</span> <span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">response</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;(msg) =&gt; childMsg = msg&#34;</span> /&gt;
+</span></span></code></pre></div><h2 id="solts">Solts</h2>
+<p>Solts即插槽，是props之外的一种将父组件信息传递给子组件的方式，不过只能传递模板元素。</p>
+<p>在父组件中调用子组件:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">ChildComp</span>&gt;
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">This</span> <span style="color:#a6e22e">is</span> <span style="color:#a6e22e">some</span> <span style="color:#a6e22e">slot</span> <span style="color:#a6e22e">content</span><span style="color:#f92672">!</span>
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">ChildComp</span>&gt;
+</span></span></code></pre></div><p>在子组件中用slot标签作为插槽出口：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span><span style="color:#75715e">&lt;!--</span> <span style="color:#a6e22e">在子组件的模板中</span> <span style="color:#f92672">--&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">slot</span>/&gt;
+</span></span></code></pre></div><p>或者，子组件的slot可以包含默认元素：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">slot</span>&gt;<span style="color:#a6e22e">Fallback</span> <span style="color:#a6e22e">content</span>&lt;/<span style="color:#f92672">slot</span>&gt;
+</span></span></code></pre></div><h2 id="组件挂载">组件挂载</h2>
+<p>Vue应用都通过<code>createApp</code>创建新的应用示例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">createApp</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;vue&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">app</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">createApp</span>({
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/* 根组件选项 */</span>
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><p>传入createApp的是一个根组件, 如果选择的是单文件组件，则可以从文件中导入：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">createApp</span> } <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;vue&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 从一个单文件组件中导入根组件
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">App</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;./App.vue&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">app</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">createApp</span>(<span style="color:#a6e22e">App</span>)
+</span></span></code></pre></div><p>应用实例必须在调用了 <code>.mount()</code> 方法后才会渲染出来。该方法接收一个“容器”参数，可以是一个实际的 DOM 元素或是一个 CSS 选择器字符串：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vue" data-lang="vue"><span style="display:flex;"><span>&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;app&#34;</span>&gt;&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">mount</span>(<span style="color:#e6db74">&#39;#app&#39;</span>)
+</span></span></code></pre></div><p>app被渲染在容器元素中，在上述代码中即为<code>div id=&quot;app&quot;</code>这一元素。<code>.mount()</code> 方法应该始终在整个应用配置和资源注册完成后被调用。</p>
+
+          </div>
+        </div></div>
+  <aside class="widget-info">
+    
+    
+    
+
+
+
+
+
+    
+
+
+
+
+  </aside>
+</div>
+  </main><footer class="footer-container layout-block">
+  
+
+  <div class="colour-bar"></div>
+  
+  
+
+  
+
+  <p>
+    Powered by
+    <a href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a>
+    Theme - 
+    <a href="https://github.com/miiiku/hugo-theme-kagome" target="_blank" rel="noopener noreferrer author">kagome</a>
+  </p>
+
+  <p>
+    <a href="javascript:;" id="theme-light">🌞 light</a>
+    <a href="javascript:;" id="theme-dark">🌛 dark</a>
+    <a href="javascript:;" id="theme-auto">🤖️ auto</a>
+  </p>
+</footer>
+
+
+
+
+
+
+
+
+</body>
+
+</html>
